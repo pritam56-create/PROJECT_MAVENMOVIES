@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="mavenconsulting_vApril2022.sql" id="Project_5bd" database="MySql" >
+	<schema name="Default" >
+		<table name="candy_products" >
+			<column name="candy_product_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="name" type="varchar" length="50" jt="12" />
+			<column name="cogs" type="decimal" length="13" decimal="2" jt="3" />
+			<column name="price" type="decimal" length="13" decimal="2" jt="3" />
+		</table>
+		<table name="course_ratings" >
+			<column name="rating_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="course_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="course_name" type="varchar" length="75" jt="12" />
+			<column name="instructor" type="varchar" length="50" jt="12" />
+			<column name="star_rating" type="bigint" jt="-5" />
+			<index name="Primary" unique="PRIMARY_KEY" >
+				<column name="rating_id" />
+			</index>
+			<index name="unq_course_ratings_course_name" unique="UNIQUE_KEY" >
+				<column name="course_name" />
+			</index>
+			<fk name="Foreign_Key" to_schema="Default" to_table="courses" >
+				<fk_column name="course_id" pk="course_id" />
+			</fk>
+		</table>
+		<table name="course_ratings_summaries" >
+			<column name="course_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="count_of_student_reviews" type="bigint" jt="-5" />
+			<column name="avg_star_rating" type="decimal" length="13" decimal="1" jt="3" />
+			<fk name="Foreign_Key" to_schema="Default" to_table="courses" >
+				<fk_column name="course_id" pk="course_id" />
+			</fk>
+		</table>
+		<table name="courses" >
+			<column name="course_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="course_name" type="varchar" length="75" jt="12" />
+			<column name="instructor" type="varchar" length="50" jt="12" />
+			<column name="launch_date" type="date" jt="91" mandatory="y" />
+			<index name="Primary" unique="PRIMARY_KEY" >
+				<column name="course_id" />
+			</index>
+			<fk name="fk_courses_course_ratings" to_schema="Default" to_table="course_ratings" >
+				<fk_column name="course_name" pk="course_name" />
+			</fk>
+		</table>
+		<table name="customer_orders" >
+			<column name="order_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="staff_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="order_total" type="decimal" length="13" decimal="2" jt="3" />
+			<index name="Primary" unique="PRIMARY_KEY" >
+				<column name="order_id" />
+			</index>
+		</table>
+		<table name="customer_purchases" >
+			<column name="customer_purchase_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="customer_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="inventory_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<fk name="fk_customer_purchases_customers" to_schema="Default" to_table="customers" >
+				<fk_column name="customer_id" pk="customer_id" />
+			</fk>
+			<fk name="fk_customer_purchases_inventory" to_schema="Default" to_table="inventory" >
+				<fk_column name="inventory_id" pk="inventory_id" />
+			</fk>
+		</table>
+		<table name="customer_reviews" >
+			<column name="customer_review_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="employee_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="customer_rating" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+		</table>
+		<table name="customers" >
+			<column name="customer_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="first_name" type="varchar" length="50" jt="12" />
+			<column name="last_name" type="varchar" length="50" jt="12" />
+			<index name="unq_customers_customer_id" unique="UNIQUE_KEY" >
+				<column name="customer_id" />
+			</index>
+		</table>
+		<table name="employees" >
+			<column name="employee_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="first_name" type="varchar" length="50" jt="12" />
+			<column name="last_name" type="varchar" length="50" jt="12" />
+			<column name="hire_date" type="date" jt="91" mandatory="y" />
+			<column name="position" type="varchar" length="50" jt="12" />
+			<column name="hourly_wage" type="decimal" length="13" decimal="2" jt="3" />
+			<index name="Primary" unique="PRIMARY_KEY" >
+				<column name="employee_id" />
+			</index>
+			<index name="Primary_001" unique="PRIMARY_KEY" >
+				<column name="employee_id" />
+			</index>
+			<index name="unq_employees_first_name" unique="UNIQUE_KEY" >
+				<column name="first_name" />
+			</index>
+			<index name="unq_employees_last_name" unique="UNIQUE_KEY" >
+				<column name="last_name" />
+			</index>
+		</table>
+		<table name="inventory" >
+			<column name="inventory_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="item_name" type="varchar" length="50" jt="12" />
+			<column name="number_in_stock" type="bigint" jt="-5" />
+			<index name="Primary" unique="PRIMARY_KEY" >
+				<column name="inventory_id" />
+			</index>
+			<index name="unq_inventory_item_name" unique="UNIQUE_KEY" >
+				<column name="item_name" />
+			</index>
+		</table>
+		<table name="inventory_non_normalized" >
+			<column name="inventory_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="film_id" type="smallint" jt="5" mandatory="y" unsigned="y" />
+			<column name="store_id" type="tinyint" jt="-6" mandatory="y" unsigned="y" />
+			<column name="title" type="varchar" length="255" jt="12" mandatory="y" />
+			<column name="description" type="text" jt="-1" />
+			<column name="release_year" type="year" jt="4" />
+			<column name="rental_rate" type="decimal" length="4" decimal="2" jt="3" mandatory="y" />
+			<column name="rating" type="enum" jt="12" >
+				<defo><![CDATA['G']]></defo>
+			</column>
+			<column name="store_manager_first_name" type="varchar" length="45" jt="12" mandatory="y" />
+			<column name="store_manager_last_name" type="varchar" length="45" jt="12" mandatory="y" />
+			<column name="store_address" type="varchar" length="255" jt="12" mandatory="y" />
+			<column name="store_city" type="varchar" length="255" jt="12" mandatory="y" />
+			<column name="store_district" type="varchar" length="255" jt="12" mandatory="y" />
+		</table>
+		<table name="menu_items" >
+			<column name="menu_item_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="item_name" type="varchar" length="50" jt="12" />
+			<column name="price" type="decimal" length="13" decimal="2" jt="3" />
+			<index name="Primary" unique="PRIMARY_KEY" >
+				<column name="menu_item_id" />
+			</index>
+			<fk name="fk_menu_items_inventory" to_schema="Default" to_table="inventory" >
+				<fk_column name="item_name" pk="item_name" />
+			</fk>
+		</table>
+		<table name="order_item_refunds_mini" >
+			<column name="order_item_refund_id" type="bigint" jt="-5" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="created_at" type="datetime" jt="93" mandatory="y" />
+			<column name="order_item_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="order_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="refund_amount_usd" type="decimal" length="13" decimal="2" jt="3" />
+			<index name="Primary" unique="PRIMARY_KEY" >
+				<column name="order_item_refund_id" />
+			</index>
+			<fk name="fk_order_item_refunds_mini_website_pageviews_non_normalized" to_schema="Default" to_table="website_pageviews_non_normalized" >
+				<fk_column name="created_at" pk="created_at" />
+			</fk>
+		</table>
+		<table name="order_items_mini" >
+			<column name="order_item_id" type="bigint" jt="-5" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="created_at" type="datetime" jt="93" mandatory="y" />
+			<column name="order_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="product_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="is_primary" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="price_usd" type="decimal" length="13" decimal="2" jt="3" />
+			<column name="cogs_usd" type="decimal" length="13" decimal="2" jt="3" />
+			<index name="Primary" unique="PRIMARY_KEY" >
+				<column name="order_item_id" />
+			</index>
+		</table>
+		<table name="orders_mini" >
+			<column name="order_id" type="bigint" jt="-5" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="created_at" type="datetime" jt="93" mandatory="y" />
+			<column name="website_session_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="user_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="primary_product_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="items_purchased" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="price_usd" type="decimal" length="13" decimal="2" jt="3" />
+			<column name="cogs_usd" type="decimal" length="13" decimal="2" jt="3" />
+			<index name="Primary" unique="PRIMARY_KEY" >
+				<column name="order_id" />
+			</index>
+			<index name="unq_orders_mini_user_id" unique="UNIQUE_KEY" >
+				<column name="user_id" />
+			</index>
+		</table>
+		<table name="staff" >
+			<column name="staff_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="first_name" type="varchar" length="50" jt="12" />
+			<column name="last_name" type="varchar" length="50" jt="12" />
+			<column name="orders_served" type="bigint" jt="-5" />
+			<index name="Primary" unique="PRIMARY_KEY" >
+				<column name="staff_id" />
+			</index>
+		</table>
+		<table name="website_pageviews_non_normalized" >
+			<column name="website_pageview_id" type="bigint" jt="-5" mandatory="y" unsigned="y" autoincrement="y" />
+			<column name="created_at" type="datetime" jt="93" mandatory="y" />
+			<column name="website_session_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="pageview_url" type="varchar" length="50" jt="12" mandatory="y" />
+			<column name="website_session_id_duped" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="session_created_at" type="datetime" jt="93" mandatory="y" />
+			<column name="user_id" type="bigint" jt="-5" mandatory="y" unsigned="y" />
+			<column name="is_repeat_session" type="smallint" jt="5" mandatory="y" unsigned="y" />
+			<column name="utm_source" type="varchar" length="12" jt="12" />
+			<column name="utm_campaign" type="varchar" length="20" jt="12" />
+			<column name="utm_content" type="varchar" length="15" jt="12" />
+			<column name="device_type" type="varchar" length="15" jt="12" />
+			<column name="http_referer" type="varchar" length="30" jt="12" />
+			<index name="Primary" unique="PRIMARY_KEY" >
+				<column name="website_pageview_id" />
+			</index>
+			<index name="unq_website_pageviews_non_normalized_created_at" unique="UNIQUE_KEY" >
+				<column name="created_at" />
+			</index>
+			<fk name="fk_website_pageviews_non_normalized_orders_mini" to_schema="Default" to_table="orders_mini" >
+				<fk_column name="user_id" pk="user_id" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="Parsed Script Layout" id="Layout_1603" show_relation="columns" >
+		<entity schema="Default" name="candy_products" color="BED3F4" x="528" y="432" />
+		<entity schema="Default" name="course_ratings" color="C7F4BE" x="512" y="48" />
+		<entity schema="Default" name="course_ratings_summaries" color="C7F4BE" x="224" y="256" />
+		<entity schema="Default" name="courses" color="C7F4BE" x="304" y="48" />
+		<entity schema="Default" name="customer_orders" color="BED3F4" x="768" y="432" />
+		<entity schema="Default" name="customer_purchases" color="BED3F4" x="976" y="432" />
+		<entity schema="Default" name="customer_reviews" color="BED3F4" x="976" y="624" />
+		<entity schema="Default" name="customers" color="BED3F4" x="1232" y="624" />
+		<entity schema="Default" name="employees" color="BED3F4" x="768" y="640" />
+		<entity schema="Default" name="inventory" color="BED3F4" x="528" y="640" />
+		<entity schema="Default" name="inventory_non_normalized" color="BED3F4" x="480" y="832" />
+		<entity schema="Default" name="menu_items" color="BED3F4" x="304" y="640" />
+		<entity schema="Default" name="order_item_refunds_mini" color="BED3F4" x="272" y="416" />
+		<entity schema="Default" name="order_items_mini" color="BED3F4" x="48" y="384" />
+		<entity schema="Default" name="orders_mini" color="BED3F4" x="96" y="608" />
+		<entity schema="Default" name="staff" color="BED3F4" x="528" y="224" />
+		<entity schema="Default" name="website_pageviews_non_normalized" color="BED3F4" x="768" y="112" />
+	</layout>
+</project>
